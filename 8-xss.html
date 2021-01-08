@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="searchInput" type="text" value="" />
+    <button id="searchBtn" type="button"  onclick="clickSearchBtn()">搜索</button>
+    <div id="showSearchText" ><a href="#" id="link">点击我</a></div>
+    <!--- 输入框出入javascript:alert('XSS')-->
+    
+    <script>
+        function clickSearchBtn(){
+            console.log(111)
+            var searchText = document.getElementById('searchInput')
+            console.log(searchText.value)
+
+            var xml = new XMLHttpRequest()
+            xml.open('GET',"http://127.0.0.1:8080/Public/test?key=" + searchText.value)
+            xml.responseType = 'json'
+            xml.send()
+            xml.onload = function(res){
+                if(xml.readyState == 4 && xml.status == 200){
+                    if(xml.response.code == 1){
+                        document.getElementById('link').href =  xml.response.data
+                    }
+                }
+            }
+           
+            
+        }
+
+    
+    
+    </script>
+
+</body>
+
+
+
+
+</html>
