@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>{{ a }}</div>
+        <div>{{ b }}</div>
+        <div>{{ c }}</div>
+        <input  v-model="aCount" ></input>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var vue = new Vue({
+        el: '#app',
+        data: function(){
+            return {
+                a: 111,
+                b: 222,
+                c: 333,
+            }
+        },
+        computed:{
+            aCount : function(){
+                return this.a + this.b;
+            }
+        },
+        watch: {
+            a : function(){
+                console.log(this.a)
+            }
+        },
+        mounted(){
+            console.log(this._watchers)
+        }
+    })
+    // 在执行js以前，页面已经渲染
+    //1、初始化initState内部initData()
+    //2、挂载 vm.$mount(vm.$options.el)
+    //wm.$mount 实例方法
+    // 此时还有一个compile过程，将模版字符串编译成render函数
+   
+    
+    /**
+     *  var res = Vue.compile("<select v-model='s'></select>")
+    console.log(res)
+    console.log(res.render)
+    console.log(res.staticRenderFns)
+     *
+
+     * 以下为解析compile过程
+     * <1>parse 解析
+     * parseHTML 
+     * template字符串：“<div><span>{{ a }}</span></div>”
+     *      1、判断template字符串是否包含“<”
+     * <2>optimize 优化  AST
+     * <3>generate 生成
+     * 3.1 genElement
+     * 3.1.1 判断是否是staticRoot
+     * 3.1.2 判断是否是once
+     * 3.1.3 判断是否有for
+     * 3.1.4 判断是否有if
+     * 3.1.5 判断tag是否等于template
+     * 3.1.6 判断tag是否等于slot
+     * 3.1.7 判断是否是component
+     * 3.1.8 则执行genData$2
+
+     * 3.1.8.1 判断是否有指令directive，有执行genDirectives
+     * 3.1.8.1.1 v-text 转化为 textContent
+     * 3.1.8.1.2 v-html 转为为 innerHTML
+     * 3.1.8.1.3 v-model  
+     * 3.1.8.1.3.1 判断是否是select，是则执行genSelect
+     * 3.1.8.1.3.4 判断是否是input，是则执行genDefaultModel
+     * 3.1.8.1.3.4.1 
+     * 3.1.8.2 判断是否有key
+     * 3.1.8.3 判断是否有ref
+     * 3.1.8.4 判断是否有refInFor
+     * 3.1.8.5 判断是否有pre
+     * 3.1.8.6 判断是否有component      
+     * 3.1.8.7 执行genData
+     * 3.1.8.7.1 判断是否有staticClass
+     * 3.1.8.7.2 判断是否有classBinding
+     * 3.1.8.8 执行genData$1
+     * 3.1.8.8.1 判断是否有staticStyle
+     * 3.1.8.8.2 判断是否有staticBinding
+     * 3.1.8.9 判断是有有attr，有责执行genprops，并组装“attr：”
+     * 3.1.8.9.1 判断是有有props，有则执行genProps，并组装“domProps：”
+     * 3.1.8.10 判断是否有events
+     * 3.1.8.11 判断是否有nativeEvents
+     * 
+     * 3.1.9 判断是否有小孩
+     * 3.1.9.1 循环小孩
+     * 3.1.9.1.1判断小孩的类型是否是1-elemet，是则执行genElement
+     * 3.1.9.1.2判断小孩的类型是否是1-comment
+     * 3.1.9.1.3判断小孩的类型是否是1-text
+     * 
+     * **/
+    //3、调用方法mountComponent
+    //4、加入生命周期beforeMount
+    //5、添加watcher，实例vm._watcher = vm， vm._watchers.push(vm)
+    //6、调用watcher的get
+    //7、调用vm._render，获取虚拟vnode
+    //8、调用wm._update
+    //9、调用patch
+    //10、判断vnode
+    //11、oldVnode.nodeType == 1则为realElement
+    //12、如何oldVnode是空，则创建一个空的Vnode代替oldVnode
+    //13、开始创建node
+    //14、创建childrem
+    //15、循环children
+    //16、body插入新的node，
+    //17、删除旧的node
+
+</script>
+
+</html>

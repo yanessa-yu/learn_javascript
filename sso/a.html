@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>A网页</div>
+    <iframe id="aFrame" src="" name="refresh_name" frameborder="0"></iframe>
+</body>
+
+<script>
+    window.onload = function(){
+        var data = JSON.stringify({
+            token:'123444'
+        })
+        var iframe =  document.getElementById("aFrame")
+        
+        var urls = [
+            'http://www.b.com:7772/b.html',
+            'http://www.c.com:7773/c.html'
+        ]
+        iframe.addEventListener('load',handler)
+        let url = urls.pop()
+         //用iframe的location.reload(true);方法来刷新外部URL会报跨域的错误
+        window.open(url,'refresh_name','')
+        function handler(){
+           iframe.contentWindow.postMessage(data, url);
+
+           if(urls.length == 0){
+               iframe.removeEventListener('load',handler)
+           }
+           url = urls.pop()
+           console.log(url)
+           window.open(url,'refresh_name','')
+        }
+      
+      
+        
+       
+    }
+</script>
+</html>

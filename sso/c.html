@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>C网页</div>
+</body>
+
+<script>
+    window.onload = function(){
+        var tokenData =  JSON.parse(localStorage.getItem('tokenData'))
+        if(tokenData && tokenData.token){
+            document.cookie =  "token=" + tokenData.token
+            console.log(localStorage.getItem('tokenData'))
+            console.log(document.cookie)
+        }
+        
+    }
+
+    window.addEventListener('message', function(e){
+        // 有消息从父级传来时 存贮 tokenData
+        if(e.source!=window.parent) return;
+        //e.data即是我们从B传来的数据 这里使用localStorage进行存贮（请勿使用sessionStorage）
+        localStorage.setItem("tokenData",e.data);
+        
+       
+    }, false)
+</script>
+</html>

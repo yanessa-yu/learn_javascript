@@ -30,14 +30,14 @@ var tree = {
                    children:  [
                        {
                          val: 6,
-                         children: null
+                         children: []
                        },
                        {
                            val: 22,
                            children: [
                               {
                                 val : 7,
-                                children: null,
+                                children: [],
                               }
                            ]
                        }
@@ -47,14 +47,14 @@ var tree = {
         },
         {
             val: 3,
-            children: null
+            children: []
         },
         {
             val: 4,
             children: [
                 {
                     val: 22,
-                    children: null
+                    children: []
                 }
             ]
         }
