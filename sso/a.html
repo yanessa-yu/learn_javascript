@@ -7,11 +7,49 @@
 </head>
 <body>
     <div>A网页</div>
+    <div><a target="_blank" href="http://www.b.com:8080/Public/getASiteCookie?cookie=111">跳转到B网站</a></div>
+    <div style="display: none;" ><img  src="http://www.b.com:8080/Public/getASiteCookie?cookie=111" alt=""></div>
     <iframe id="aFrame" src="" name="refresh_name" frameborder="0"></iframe>
 </body>
 
+<script src="https://static2.51fanli.net/common/libs/jquery/jquery.min.js"></script>
 <script>
     window.onload = function(){
+        var url =  "http://www.d.com:7774/getASiteCookie?" 
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url 
+        document.head.appendChild(script)
+      
+        //jquery ajax jsonp跨域
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'jsonp',
+            jsoncallback: "jsoncallback",
+            data: {a:1},
+            success(res){
+                console.log(res)
+            }
+        })
+
+        $.ajax({
+            url: url ,
+            type: 'get',
+            dataType: 'json',
+            data: {a:1},
+            xhrFields: {
+                withCredentials: true    // 前端设置是否带cookie
+            },
+            crossDomain: true,   // 会让请求头中包含跨域的额外信息，但不会含cookie
+            success(res){
+                console.log(res)
+            }
+        })
+       
+    }
+
+    function sso(){
         var data = JSON.stringify({
             token:'123444'
         })
@@ -35,10 +73,6 @@
            console.log(url)
            window.open(url,'refresh_name','')
         }
-      
-      
-        
-       
     }
 </script>
 </html>

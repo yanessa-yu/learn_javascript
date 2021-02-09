@@ -1,0 +1,19 @@
+{
+  "name": "all-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-static": "^0.7.11",
+    "nodejs-websocket": "^1.7.2",
+    "sockjs": "^0.3.21"
+  },
+  "dependencies": {
+    "sockjs-client": "^1.5.0"
+  }
+}
