@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>{{ a }}</div>
+        <div>{{ b }}</div>
+        <div>{{ c }}</div>
+        <input  v-model="aCount" ></input>
+        <div>{{ a + 100 }}</div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var vue = new Vue({
+        el: '#app',
+        data: function(){
+            return {
+                a: 111,
+                b: 222,
+                c: 333,
+            }
+        },
+        computed:{
+            aCount : function(){
+                return this.a + this.b;
+            }
+        },
+        watch: {
+            a : function(){
+                console.log(this.a)
+            }
+        },
+        methods: {
+            aa: function(){
+                this.$nextTick(function(){
+                    console.log(222)
+                })
+            }
+        },
+        mounted(){
+            let _this = this
+            _this.aa()
+            _this.aa()
+            _this.a = 4444
+            console.log(333)
+            _this.$nextTick(function(){
+                console.log(document)
+                console.log(1111)
+            })
+        }
+    })
+    
+
+</script>
+
+</html>

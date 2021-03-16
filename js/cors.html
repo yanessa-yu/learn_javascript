@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        var xhr =  new XMLHttpRequest()
+        //open方法初始化一个请求。
+        //open方法的第三个三处是async
+        //一个可选的布尔参数，表示是否异步执行操作，默认是tre。
+        //如果值时false，send()方法直到收到答复前不会回复
+        //如果是true，已完成事务的通知可供事件监听器使用
+        xhr.open('GET','http://10.200.137.53:8772/getAge',true);
+        xhr.onload = function(res){
+            console.log(res)
+        }
+        xhr.send(null)
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>cors跨域原理</div>
+</body>
+<script>
+    //demo1
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://10.200.137.53:8772/noCors',true);
+    xhr.onload = function(res){
+        console.log(res)
+    }
+    xhr.send(null);
+
+    //demo2
+    //服务器增加：Access-Control-Allow-Origin
+    //response headers里面增加了Access-Control-Allow-Origin: http://10.200.137.53:8771
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','http://10.200.137.53:8772/cors',true);
+    xhr.onload = function(res){
+        console.log(res)
+    }
+    xhr.send(null);
+
+    //demo3
+    //将demo2的get请求换成put请求
+    //此时会发出两个http请求，第一个请求成为“预检”请求
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT','http://10.200.137.53:8772/putCors',true);
+    xhr.setRequestHeader('X-Custom-Header', 'value');
+    xhr.onload = function(res){
+        console.log(res)
+    }
+    xhr.send(null);
+
+    //demo4
+    //
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD','http://10.200.137.53:8772/headCors',true);
+    xhr.onload = function(res){
+        console.log(res)
+    }
+    xhr.send(null);
+</script>
+</html>
