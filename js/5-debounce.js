@@ -5,6 +5,31 @@
 
 //实现的关键在于setTimeout函数，由于还需要一个变量来保存计时
 //考虑维护全局纯净，可以借助闭包来实现
+
+
+//防抖
+function debounce2(fn,delay){
+    var timer = null
+    if(timer){
+        clearTimeout(timer)
+        timer = setTimeout(fn, delay);
+    }else{
+        timer = setTimeout(fn, delay);
+    }
+}
+
+function run(){
+    console.log(111)
+}
+
+setInterval(run, 1000);
+
+
+
+
+
+
+
 function debounce(fn, delay){
     var timer = null
     return function(){
