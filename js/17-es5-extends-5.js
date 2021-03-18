@@ -8,30 +8,17 @@
 **/
 
 
-function ClassA(sColor){
-    this.sColor = sColor
+function Parent(name){
+    this.name = name
 }
-
-ClassA.prototype.getColor = function(){
-    console.log(this.color)
-}
-
-function ClassB(sColor, sName){
-    ClassA.call(this, sColor)
-    this.name = sName
-}
-
-ClassB.prototype = new ClassA()
-ClassA.prototype.getName = function(){
+Parent.prototype.getName = function(){
     console.log(this.name)
 }
+function Child(name){
+    Parent.call(this, name)
+}
+Child.prototype = Object.create( Parent.prototype)
+Child.prototype.constructor = Child
 
-
-var objA = new ClassA()
- var objB = new ClassB()
- objA.color = 'red'
- objB.color = 'blue'
- objB.name = 'ysg'
- objA.getColor();
- objB.getColor();
- objB.getName()
+ var objB = new Child('ysg')
+ objB.getName();

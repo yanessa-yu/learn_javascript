@@ -36,3 +36,22 @@
  objA.getColor();
  objB.getColor();
  objB.getName()
+
+
+
+ function A(){
+    
+ }
+
+ A.prototype.getName = function(){
+    console.log('ysg')
+ }
+
+ function B(){
+   
+ }
+
+ B.prototype = new A()
+ 
+ var b = new B()
+ b.getName()
