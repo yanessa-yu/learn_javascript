@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .red{
+            color: red;
+            font-size: 20px;
+        }
+        .green{
+            color: green;
+            font-size: 30px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <div class="static-node"><span>你好，我是一个小本有</span></div>
-        <div>{{ a }}</div>
-        <div>{{ b }}</div>
-        <div>{{ c }}</div>
-        <input  v-model="aCount" ></input>
-        <div>{{ a + 100 }}</div>
+        <div ref="showHtml">
+            <p :class="a==111?'red':'green'">{{ a }}</p>
+        </div>
+        <button v-on:click="clickBtn">点击</button>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -24,20 +33,23 @@
                 a: 111,
                 b: 222,
                 c: 333,
+                num: 0
             }
         },
-        computed:{
-            aCount : function(){
-                return this.a + this.b;
-            }
-        },
-        watch: {
-            a : function(){
-                console.log(this.a)
-            }
+        methods: {
+            clickBtn(){
+                let that = this
+                that.a = 123
+                console.log(1,that.$refs.showHtml.innerHTML)
+                that.$nextTick(function(){
+                    that.a = 111
+                    console.log(2,that.$refs.showHtml.innerHTML)
+                })
+                console.log(3,that.$refs.showHtml.innerHTML)
+            },
+          
         },
         mounted(){
-            console.log(this._watchers)
         }
     })
     // 在执行js以前，页面已经渲染
@@ -118,5 +130,7 @@
     //17、删除旧的node
 
 </script>
+
+
 
 </html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        var url = "http://10.200.137.53:8080/Public/requestPaymentToPdf"
+		var xmlhttp;
+		if(window.XMLHttpRequest){
+			xmlhttp = new XMLHttpRequest()
+		}else{
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP")
+		}
+        xmlhttp.open('POST',url,'async')
+        xmlhttp.response = 'json'
+        xmlhttp.onprogress = function(e){
+            console.log(e)
+        }
+        xmlhttp.onload = function(e){
+			if(xmlhttp.status == 200){
+                var res = JSON.parse(xmlhttp.response)
+                console.log(res.code)
+            }			
+        }
+       
+        xmlhttp.send()
+        
+    </script>
+</body>
+</html>

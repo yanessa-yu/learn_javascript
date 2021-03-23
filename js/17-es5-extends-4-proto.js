@@ -51,7 +51,7 @@
    
  }
 
- B.prototype = new A()
+ B.prototype = new A() 
  
  var b = new B()
  b.getName()
