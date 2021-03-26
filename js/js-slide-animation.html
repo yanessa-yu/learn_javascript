@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box{
+            width: 100px;
+            height: 100px;
+            background-color: green;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <div id="box"></div>
+    </div>
+    <script>
+        //原生js实现一个滑动动画，有快到慢，5秒结束
+        var box = document.getElementById("box");
+        var sum = 0;
+        var left = 0
+        var step = 100
+        var delayTime = 10;
+        function run(time){
+                setTimeout(()=>{
+                    left = left + 10
+                    box.style.left = left  + 'px'
+                    sum = sum + time
+                    if(sum < 50000){
+                        run(time + step)
+                    }
+                },time)
+        }
+        run(delayTime)
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #line1{
+            width: 100%;
+            height: 1px;
+            background: red;
+            margin-bottom: 100px;
+        }
+
+        #line2{
+            width: 100%;
+            height: 1px;
+            background-color: red;
+            transform: scaleY(0.2);
+        }
+        #box{
+            width: 500px;
+            height: 500px;
+            background-color: green;
+            transform: skewX(20);
+        }
+        #innerBox{
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <div id="innerBox"></div>
+        <div></div>
+    </div>
+    <div id="line1">
+
+    </div>
+
+    <div id="line2">
+
+    </div>
+
+    <script>
+        //防抖，
+        function fun(cb, delay){
+            var timer ;
+            if(timer){
+
+            }else{
+                timer = setTimeout(cb, delay)
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>{{ count }}</div>
+        <div>{{ nCount }}</div>
+        <button v-on:click="add">加+</button>
+        <component-a></component-a>
+
+        <div>-------------------------------------------</div>
+        <div>{{ a }}</div>
+        <div>{{ aEdit }}</div>
+        <button v-on:click="editA">修改a</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
+    <script>
+
+        const moduleA = {
+            state: {
+                a: 'a'
+            },
+            //对于模块内部的 mutation 和 getter，接收的第一个参数是模块的局部状态对象。
+            getters: {
+                //对于模块内部的 getter，根节点状态会作为第三个参数暴露出来：
+                aMore(state, getters, rootState){
+                    console.log(getters)
+                    console.log(rootState)
+                    return state.a + "bcd"
+                }
+            },
+            mutations : {
+                editA(state){
+                    if(state.a == 'a'){
+                        state.a = 'b'
+                    }else{
+                        state.a = 'a'
+                    }
+                }
+            },
+            actions: {
+                editAAsync(context){
+                    //对于模块内部的 action，局部状态通过 context.state 暴露出来，
+                    //根节点状态则为 context.rootState：
+                    console.log(context.state.a)
+                    console.log(context.rootState.count)
+                    console.log(context.rootState.moduleA.a)
+                    setTimeout(function(){
+                        context.commit('editA')
+                    }, 3000)
+                }
+            }
+        }
+         const store = new Vuex.Store({
+             state: {
+                 count: 0
+             },
+             getters: {
+                nCount(state){
+                    return state.count * 2
+                }
+             },
+             mutations: { // [mjuːˈteɪʃn]  改变
+                 add(state){
+                    state.count ++ 
+                 }
+             },
+             actions: {
+                 addAsync(context){
+                    
+                     setTimeout(function(){
+                        context.commit('add')
+                     }, 3000)
+                 }
+             },
+             modules: {
+                 moduleA: moduleA
+             }
+         })
+
+        //定义一个组件
+        Vue.component('component-a',{
+            template: '<div>组件内的计时器{{ countA }}</div>',
+            computed: {
+                countA(){
+                    return this.$store.state.count
+                }
+            }
+        })
+
+         var vm = new Vue({
+            el: '#app',
+            store: store,
+            computed: {
+                count(){
+                    return this.$store.state.count
+                },
+                nCount(){
+                    return this.$store.getters.nCount
+                },
+                a(){
+                    return this.$store.state.moduleA.a
+                },
+                aEdit(){
+                    return this.$store.getters.aMore
+                }
+            },
+            methods: {
+                add(){
+                    this.$store.commit('add')
+                    this.$store.dispatch('addAsync')
+                },
+                editA(){
+                    this.$store.commit('editA')
+                    this.$store.dispatch('editAAsync')
+                }
+            }
+         })
+    </script>
+</body>
+</html>

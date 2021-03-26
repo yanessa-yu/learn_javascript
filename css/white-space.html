@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box1{
+            white-space:normal;
+        }
+        #box2{
+            white-space:pre;
+        }
+        #box3{
+            width: 400px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        #box4{
+            white-space: pre-wrap;
+        }
+        #box5{
+            white-space: pre-line;
+        }
+        #box6{
+            white-space: inherit;
+        }
+        #app{
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="box1">
+            white-space: normal;
+            默认。     空白会被浏览器忽略
+        </div>
+        <div id="box2">
+            white-space: pre;
+            空白会被浏览器保留，其行为类似HTML中的pre标签
+        </div>
+        <div id="box3">
+            white-space: nowrap;  [ræp]
+            文本不会换行，文本会在用一行上继续，知道遇到br标签为止。
+            text-overfow 属性规定当文本溢出包含元素时发生的事情。
+            clip [klɪp]  默认 修剪文本
+            elipsis [ɪˈlɪpsɪs] 显示省略号来代表被修剪的文本
+            string 使用给定的字符串来代表被修剪的文本。
+        </div>
+        <div id="box4">
+            white-space: pre-wrap;  [ˈpriː] 
+            保留空白符序列，但是正常地进行换行。
+        </div>
+        <div id="box5">
+            white-space:pre-line; 
+            合并空白符序列，     但是保留换行符。
+        </div>
+        <div id="box6">
+            white-space: inherit; [ɪnˈherɪt] 
+            规定应该从父元素white-space属性的值
+        </div>
+    </div>
+</body>
+</html>

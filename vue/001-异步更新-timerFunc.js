@@ -5,6 +5,9 @@ if(typeof Promise !== 'undefined'){
     timerFunc = function(){
         p.then(flushCallbacks);
     }
+
+    //observer [əbˈzɜːvə(r)] 观察者
+    //mutation  [mjuːˈteɪʃn] 变异，突变;(形式或结构的)转变，改变
 }else if(MutationObserver !== 'undefined'){
     var counter = 1
     var observer = new MutationObserver(flushCallbacks)

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>vue插件</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+
+        //写一个插件
+        var myPlugin = {
+            //install方法是必须的，参数是Vue
+            install: function(Vue){
+                console.log("这是一个vue插件")
+                //1、添加全局方法或者属性
+                Vue.myGlobalMethod = function(){
+                    console.log("这是通过插件添加的全局方法")
+                }
+                //注入组件选项
+                Vue.mixin({
+                    created: function(){
+                        //该内容会在之前执行
+                        console.log("这是通过组件注入到created里面的内容")
+                    }
+                })
+                //在Vue的原型上定义一个全局方法
+                Vue.prototype.$getMyName = function(){
+                    console.log("这是通过插件添加的实例方法")
+                }
+            }
+        }
+
+        //安装插件
+        Vue.use(myPlugin)
+
+        var vm =  new Vue({
+            mounted(){
+                var myName = this.$getMyName()
+            }
+        })
+
+        Vue.myGlobalMethod()
+    </script>
+</body>
+</html>
