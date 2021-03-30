@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="text"></div>
+
+    <script>
+        var lastLoop =  (new Date()).getMilliseconds();
+        var count = 1,arr = [],fps = 0, index = 0
+        
+        function step(){
+          var currentLoop = (new Date()).getMilliseconds(); //获取毫秒
+          if(lastLoop > currentLoop){  //从新开始新的一轮0-10000
+              fps = count;
+              arr.push(fps)
+              count = 1;
+          }else{//0-1000毫秒
+              count += 1
+          }
+         
+        //document.getElementById('text').innerHTML = lastLoop + currentLoop
+          console.log(count,fps)
+          lastLoop = currentLoop
+          index = index + 1
+
+          
+         
+          if(index < 1000){
+            window.requestAnimationFrame(step);
+          }else{
+              console.log('每秒的帧数')
+              console.log(arr) //(16) [54, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60]
+          }
+          
+        }
+
+        step()
+
+    </script>
+</body>
+</html>
