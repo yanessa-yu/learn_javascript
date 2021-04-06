@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div>事件绑定方式<input type="text" v-bind:value="val" v-on:input="inputVal" /></div>
+        <div>自定义指令的方式<input v-input-filter-cde="val" /></div>
+        <div>watch方式<input type="text" v-model="val"/></div>
+        <div>computed方法<input type="text" v-model="computedVal"/></div>
+
+        <div >
+            <ul v-on:click="clickbtn">
+                <li>aaaaa</li>
+                <li>bbbbb</li>
+                <li>ccccc</li>
+           </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data(){
+                return {
+                    val: ''
+                }
+            },
+            directives:{
+                'input-filter-cde': {
+                    bind: function(el, binding, vnode){
+                        var context = vnode.context
+                        var property = binding.expression
+                        el.value = context[property]
+
+                        el.oninput = function(e){
+                           var value = e.target.value || e.currentTarget.value
+                           context[property] = value.replace(/[cde]/g, '')
+                           el.value = value.replace(/[cde]/g, '')
+                        }
+                    },
+                    update: function(el, binding, vnode){
+                        console.log(vnode.context.val)
+                    }
+                }
+            },
+            filters: { //过滤器只能用在双花括号插值和v-bind表达式中
+                filtercde: function(value){
+                    value = value.toString()
+                    var filterArr = ['c','d','e']
+                    if(filterArr.indexOf(e.data) >= 0){
+                       return value.substring(0,this.val.length - 1)
+                    }else{
+                        return value
+                    }
+                }
+            },
+            watch: {
+                val: function(newVal, oldVal){
+                    let _this = this
+                    _this.val = _this.val.replace(/[cde]/g, '')
+                }
+            },
+            computed: {
+                computedVal: {
+                    get: function(){
+                        let _this = this
+                        return _this.val.replace(/[cde]/g, '')
+                    },
+                    set: function(v){
+                        let _this = this
+                        _this.val = v
+                    }
+                }
+            },
+            methods: {
+                inputVal(e){
+                    let _this = this
+                    _this.val = e.target.value ||  e.currentTarget.value
+                    var filterArr = ['c','d','e']
+                    if(filterArr.indexOf(e.data) >= 0){
+                        _this.val = _this.val.replace(e.data,'')
+                    }
+                },
+                clickbtn(e){
+                    console.log(e.currentTarget)
+                    console.log(e.target)
+                }
+            }
+        })
+    </script>
+    
+
+    
+</body>
+</html>

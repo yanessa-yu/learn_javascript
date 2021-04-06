@@ -10,8 +10,9 @@ var lastArr = []
 
 function flatten1(arr){
     arr.forEach(element => {
-        if(Array.isArray(element)){
-            flatten(element)
+        //if(Array.isArray(element)){
+        if(element instanceof Array){
+            flatten1(element)
         }else{
             lastArr = lastArr.concat(element)
         }
@@ -51,5 +52,5 @@ function flatten4(arr){
 }
 
 var arr = [1, [2, 3, [4, 5]]];
-var arrLast = flatten4(arr)
+var arrLast = flatten1(arr)
 console.log(arrLast)

@@ -4,12 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .father{
+            display: flex;
+            width: 200px;
+            align-items:stretch;
+            height: 200px;
+        }
+        
+        .son1{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            flex-shrink:0;
+            flex-basis:300px
+        }
+        .son2{
+            height: 100px;
+            width: 100px;
+            background-color: yellowgreen;
+        }
+        .son3{
+            width: 100px;
+            height: 100px;
+            background-color: green;
+        }
+
+    </style>
 </head>
 <body>
     <div class="father">
-        <div class="son1"></div>
-        <div class="son2"></div>
-        <div class=""></div>
+        <div class="son son1">111</div>
+        <div class="son son2">222</div>
+        <div class="son son3">333</div>
     </div>
 </body>
 </html>
