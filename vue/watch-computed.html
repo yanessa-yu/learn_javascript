@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{ c }}
+        <div>
+            <button v-on:click="alertA">修改a</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data(){
+                return {
+                    a: 1,
+                    b: 2
+                }
+            },
+            computed : {
+                c : function(){
+                    return this.a + this.b
+                }
+            },
+            watch: {
+               c : function(newVal, oldVal){
+                    console.log(newVal, oldVal)
+               }
+            },
+            methods :{
+                alertA: function(){
+                    this.a = 4
+                }
+            }
+        })
+    </script>
+</body>
+</html>
