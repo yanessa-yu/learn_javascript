@@ -8,7 +8,7 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceFolder}/js/suanfa.js",
+        "program": "${workspaceFolder}/js/1-promise/promise20210412.js",
         "skipFiles": [
             "<node_internals>/**"
         ]

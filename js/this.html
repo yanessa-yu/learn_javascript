@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        var length = 10 
+        function fn(){
+            console.log(this.length)
+        }
+
+        var obj = {
+            length: 5,
+            f : function(fn){
+                fn()
+                arguments[0]() 
+            }
+        }
+
+        //输出是10和2
+        ////arguments是一个数组，也算是一个对象，被对象调用的方法的this指向该对象
+
+        function fn2(){
+            var length = 15
+            fn()
+            console.log(this.length)
+            function fn3(){
+                console.log(this.length)
+            }
+            fn3()
+        }
+
+obj.f(fn, 2)
+fn2()
+
+
+
+var length = 10 
+function fn(){
+    console.log(this.length)
+}
+function fn2(){
+    var length = 5
+    fn()
+}
+    
+    
+    
+    </script>
+</body>
+</html>
