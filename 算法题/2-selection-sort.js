@@ -81,22 +81,29 @@ function insertSort(arr){
 }
 
 //希尔排序
+//指定一个间隔长度，间隔获取一个子数组，再对子数组进行排序
+
 
 //归并排序，利用递归的思想
-function merget(){
-    //合并两个已经排序好的子数组
-    var arr = [2,4,6,8,1,3,5]
+function merget(arr,tempArr,start,end){
+    if(start >= end){//此处是递归终止的条件
+        return
+    }
+    
     //获取中间位置
-    var midPos = Math.floor(arr.length / 2)
-    console.log(midPos)
+    var midPos = Math.floor((start + end) / 2)
     //定义一个新的数据
-    var tempArr = new Array(arr.length);
+   
     //定义三个指针，
     //第一个指针指向子数组1的起始位置
     //第二个指针指向子数组2的起始位置
     //第三个指针指向新数组的起始位置
-    var i = 0, j = midPos + 1, k = 0;
-    while(i <= midPos && j < arr.length){
+    var i = start, j = midPos + 1, k = start;
+    merget(arr,tempArr, start,midPos);
+    merget(arr,tempArr,midPos+1,end);
+
+    //合并两个已经排序好的子数组
+    while(i <= midPos && j <= end){
         if(arr[i] <= arr[j]){
             tempArr[k] = arr[i];
             i++
@@ -117,13 +124,50 @@ function merget(){
         j++
         k++
     }
+    for (let index = start; index <= end; index++) {
+       arr[index] = tempArr[index]
+        
+    }
     console.log(tempArr)
 }
 
-var arr = [5,4,2,7,1,9,3,6,8]
-merget(arr)
 
-console.log(arr)
+// var arr = [5,4,2,7,1,9,3,6,8]
+// var tempArr = new Array(arr.length);
+// merget(arr,tempArr, 0, arr.length - 1)
+
+//快速排序
+/**
+ * 快速排序也是基于递归的
+ * 思想：选择一个参考值，
+ * 
+ * **/
+
+ function quickSort(arr){
+     if(arr.length <= 1){
+         return arr
+     }
+    //选择中间值作为参考值
+    var targetPosition = Math.floor(arr.length/2)
+    //抠出中间值
+    var targetValue = arr.splice(targetPosition, 1)[0]
+    var left = [] //定义一个数组存储比参考值小的数
+    var right = [] //定义一个数组存储比参考值大的数
+    for(var i=0; i<arr.length;i++){
+        if(arr[i] < targetValue){
+            left.push(arr[i])
+        }else{
+            right.push(arr[i])
+        }
+    }
+    return quickSort(left).concat([targetValue],quickSort(right)) //合并三个数组的值
+ }
+var arr = [5,4,2,7,1,9,3,6,8]
+var lastArr = quickSort(arr)
+console.log(lastArr)
+
+
+
 
 
 
