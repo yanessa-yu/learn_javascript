@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{width: 100px;height: 100px;}
+    </style>
+</head>
+<body>
+    <div>
+        <img src="http://localhost:8080/sources/5fea9f5663f0a.jpg" alt="">
+        <img src="http://localhost:8080/Public/Images/anniversary.png" alt="">
+    </div>
+
+    <script>
+        if('serviceWorker' in navigator){
+        
+            navigator.serviceWorker.register('sw.js')
+            .then( value => console.log('Service Worker注册成功'))
+            .catch( err => console.log('Service Worker 注册失败', err))
+        }
+    </script>
+</body>
+</html>

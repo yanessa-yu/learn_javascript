@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #app {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        1111111
+    </div>
+    <div id="app">
+
+        <div class="dom1">
+            你好
+        </div>
+        <div class="dom2">
+            我是yanessa
+        </div>
+    </div>
+
+
+    <script>
+    var shadow =   document.getElementById("app").attachShadow({mode: 'open'})
+         // 给 shadow DOM 添加文字
+  shadow.innerHTML = '<p>Here is some new text</p>';
+  // 添加CSS，将文字变红
+  shadow.innerHTML += '<style>p { color: red; }</style>';
+    </script>
+</body>
+</html>

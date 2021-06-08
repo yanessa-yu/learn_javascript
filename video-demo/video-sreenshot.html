@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>²¥·ÅÆ÷½ØÍ¼Ê¾Àý</title>
+  </head>
+  <body>
+    <h3>°¢±¦¸ç£º²¥·ÅÆ÷½ØÍ¼Ê¾Àý</h3>
+    <video id="video" controls="controls" width="460" height="270" crossorigin="anonymous">
+      <!-- ÇëÌæ»»ÎªÊµ¼ÊÊÓÆµµØÖ· -->
+      <source src="http://10.200.137.53:8080/video-demo/videos/mv.mp4" />
+    </video>
+    <button onclick="captureVideo()">½ØÍ¼</button>
+    <script>
+      let video = document.querySelector("#video");
+      let canvas = document.createElement("canvas");
+      let img = document.createElement("img");
+      img.crossOrigin = "";
+      let ctx = canvas.getContext("2d");
+
+      function captureVideo() {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        img.src = canvas.toDataURL();
+        document.body.append(img);
+      }
+    </script>
+  </body>
+</html>

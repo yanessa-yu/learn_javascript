@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //https://blog.csdn.net/qfluohao/article/details/105662038?utm_medium=distribute.pc_relevant.none-task-blog-baidujs_title-0&spm=1001.2101.3001.4242
+    
+    var a = 0
+    if(true){
+        a = 1 
+        function a(){}
+        a = 21
+        console.log('内部', a, window.a)
+    }
+    console.log('外部', a, window.a)
+
+
+    
+var b = 0
+{
+    b = 1
+    let b1 =  function(){}
+    b1 = 21
+    console.log('内部', b1, window.b); 
+    
+}
+console.log('外部', b , window.b);
+</script>
+</html>

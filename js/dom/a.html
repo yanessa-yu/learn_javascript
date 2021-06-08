@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="div0">
+        <div class="div1">
+            <div class="div11"></div>
+            <div class="div12"></div>
+        </div>
+        <div class="div2">
+            <div class="div21"></div>
+            <div class="div22"></div>
+        </div>
+        <div class="div3">
+            <div class="div31"></div>
+            <div class="div32"></div>
+        </div>
+    </div>
+
+
+    <script>
+         var root = document.getElementsByClassName('div0')[0];
+         
+         function outputChildrens(node){
+            var childrens = node.children
+            for(var i=0; i<childrens.length; i++){
+                 var element = childrens[i];
+                 console.log(element.className)
+                outputChildrens(element)
+            }
+         }
+         console.log(root.className)
+         outputChildrens(root)
+    </script>
+</body>
+</html>

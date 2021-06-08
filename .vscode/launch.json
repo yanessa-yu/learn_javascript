@@ -8,7 +8,7 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceFolder}/算法题/2-selection-sort.js",
+        "program": "${workspaceFolder}/node/module/a.js",
         "skipFiles": [
             "<node_internals>/**"
         ]

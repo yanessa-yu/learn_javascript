@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+
+        window.onerror = function(msg, url, lineNo, columnNo, error){
+            //处理error信息
+            console.log(msg, url, lineNo, columnNo, error)
+        }
+
+        window.addEventListener('error', function(event){
+            console.log('addEventLister error：' , event)
+        }, true)
+        // true代表在捕获阶段调用，false代表在冒泡阶段捕获。使用true和false都可以
+        const a = 1
+        // a = 2
+        // console.log(a)
+
+        window.addEventListener('unhandledrejection', function(event){
+            console.log("_________________________________________________")
+            console.log( event)
+        })
+
+        new Promise((resolve, reject) => {
+           throw new Error('123')
+           resolve()
+        })
+
+        new Promise((resolve, reject) => {
+            reject('321')
+        })
+
+        new Promise((resolve, reject) => {
+            reject('456')
+        }).then((value)=>{
+
+        }, (reason)=> {
+            console.log(reason)
+        })
+       
+
+        var consoleError = window.console.error
+        window.console.error = function(){
+            console.log(JSON.stringify(arguments));
+            consoleError && consoleError.apply(window, arguments)
+        }
+
+        console.error('11111')
+    </script>
+</body>
+</html>

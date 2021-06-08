@@ -8,8 +8,8 @@
 <body>
     <div id="app">
         <div>{{ a }}</div>
-        <button v-on:click="clickA">修改a</button>
-        <component-a v-bind:a=a></component-a>
+        <button v-on:click="alertA">修改a</button>
+        <component-a v-bind:a=a v-on:alertA="alertA"></component-a>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -19,9 +19,7 @@
 let  myComponent = Vue.extend({
     template: '<div>这是一个组件</div>'
 })
-console.log(myComponent)
 let myComp = new myComponent()
-console.log(myComp)
 Vue.component('MyComponent',myComponent)
 
 
@@ -34,7 +32,17 @@ var componentA = {
                     b: 11
                 }
            },
-           template:'<div><div>{{ b }}</div><div>{{ a }}</div></div>',
+           template:`
+           <div>
+                <div>{{ b }}</div>
+                <div>{{ a }}</div>
+                <button v-on:click="alertA">修改a</button>
+            </div>`,
+            methods: {
+                alertA(){
+                    this.$emit('alertA')
+                }
+            },
            beforeCreate(){
                 console.log("子组件beforeCreate")
             },
@@ -98,7 +106,7 @@ var componentA = {
                 console.log("父组件destory")
             },
             methods: {
-                clickA(){
+                alertA(){
                     this.a = this.a + 1
                 }
             }

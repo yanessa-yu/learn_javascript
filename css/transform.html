@@ -22,11 +22,10 @@
             width: 500px;
             height: 500px;
             background-color: green;
-            transform: skewX(20);
         }
         #innerBox{
-            width: 20px;
-            height: 20px;
+            width: 50px;
+            height: 50px;
             background-color: red;
             position: fixed;
             top: 0;
@@ -53,7 +52,7 @@
         function fun(cb, delay){
             var timer ;
             if(timer){
-
+                clearTimeout(timer)
             }else{
                 timer = setTimeout(cb, delay)
             }
