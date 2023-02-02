@@ -10,10 +10,54 @@
     <div>my name is yanessa, welcome to my website.
     </div>
     <script>
+        
+        //测试接口错误
+        function send500(){
+            let url = 'https://unpkg.com/api/stats?period=last-month';
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url,true);
+            xhr.onload = function(res){
+                console.log(res.target.status)
+            }
+            xhr.send(null);
+        }
+        send500();
+
+        function send(){
+            let url = 'https://www.google-analytics.com/j/collect?v=1&_v=j99&a=812948156&t=pageview&_s=1&dl=https%3A%2F%2Funpkg.com%2F'
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url,true);
+            xhr.onload = function(res){
+                console.log(res.target.status)
+            }
+            xhr.send(null);
+        }
+        send()
+
+        function send1() {
+            let url = 'https://fanyi.baidu.com/mtpe/user/getInfo?_=1675305741277';
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',url,true);
+            xhr.onload = function(res){
+                console.log(res.target.status)
+            }
+            xhr.send(null);
+        }
+        send1();
+
+        // Promise未处理的错误
+        new Promise((resolve, reject) => {
+            reject('promise error')
+        })
+
+        // console.error("console error");
+
+        // 测试js ReferenceError : JS 运行的错误
         console.log(a)
     </script>
     <script src="https://unpkg.com/element-ui/lib/index404.js"></script>
     <script src="https://unpkg.cn/element-ui/lib/index502.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://static2.51fanli.net/common/libs/headjs/head.min.js"></script>
 </body>
 </html>
