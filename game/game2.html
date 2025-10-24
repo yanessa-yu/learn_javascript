@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>拼图小游戏（滑动拼图）</title>
+  <style>
+    :root{
+      --board-size: 500px;
+      --gap: 2px;
+    }
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 16px;
+      color: #222;
+      background: #f6f8fa;
+    }
+
+    header{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom: 12px;
+    }
+
+    label{font-size:14px}
+    select, input[type="text"], input[type="file"], button{
+      padding:6px 8px;
+      font-size:14px;
+    }
+
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .status{
+      margin-left: auto;
+      font-size:14px;
+    }
+
+    .game{
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      margin-top:8px;
+    }
+
+    .board-wrap{
+      width:var(--board-size);
+      min-width:200px;
+    }
+
+    .board{
+      position:relative;
+      width:100%;
+      padding-top:100%; /* square board */
+      background:#ddd;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-radius:6px;
+      overflow:hidden;
+      touch-action: manipulation;
+    }
+
+    .tiles{
+      position:absolute;
+      inset:0;
+      display:grid;
+      grid-template-columns:repeat(var(--n), 1fr);
+      grid-template-rows:repeat(var(--n), 1fr);
+      gap:var(--gap);
+      width:100%;
+      height:100%;
+      padding:var(--gap);
+      box-sizing:border-box;
+    }
+
+    .tile{
+      background-size: calc(var(--n) * 100%) calc(var(--n) * 100%);
+      background-repeat:no-repeat;
+      cursor: pointer;
+      user-select:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:rgba(255,255,255,0.9);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+      border-radius:4px;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.08);
+      transition: transform 0.12s ease;
+    }
+
+    .tile:active{ transform: scale(.98); }
+    .tile.empty{
+      background: transparent;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .hint{
+      font-size:13px;
+      color:#555;
+      margin-top:8px;
+    }
+
+    .sidebar{
+      min-width:220px;
+      max-width:360px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .btn-row{ display:flex; gap:8px; flex-wrap:wrap; }
+    .big{
+      padding:8px 12px;
+      font-weight:600;
+    }
+
+    .win{
+      background: linear-gradient(90deg,#1abc9c,#16a085);
+      color:white;
+      padding:8px 12px;
+      border-radius:6px;
+      text-align:center;
+    }
+
+    footer{ margin-top:14px; font-size:13px; color:#666 }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>滑动拼图小游戏</h2>
+    <div class="status" id="status">步数: 0 • 用时: 00:00</div>
+  </header>
+
+  <div class="controls">
+    <label>网格大小:
+      <select id="size">
+        <option value="3">3 × 3</option>
+        <option value="4">4 × 4</option>
+        <option value="5">5 × 5</option>
+      </select>
+    </label>
+
+    <label>图片 URL:
+      <input type="text" id="imgUrl" placeholder="可留空使用默认图 (按 Enter 应用)">
+    </label>
+
+    <label>或选择图片文件:
+      <input type="file" id="imgFile" accept="image/*">
+    </label>
+
+    <div class="btn-row">
+      <button id="shuffleBtn" class="big">打乱</button>
+      <button id="resetBtn">重置</button>
+      <button id="solveBtn">显示解（还原）</button>
+    </div>
+  </div>
+
+  <div class="game">
+    <div class="board-wrap">
+      <div class="board" id="board" aria-label="拼图棋盘">
+        <div class="tiles" id="tiles" style="--n:3"></div>
+      </div>
+      <div class="hint">点击相邻的方块移动空格，完成拼图即获胜。</div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="panel">
+        <strong>控制面板</strong>
+      </div>
+      <div id="info">
+        <div>步数: <span id="moves">0</span></div>
+        <div>用时: <span id="time">00:00</span></div>
+      </div>
+
+      <div style="margin-top:8px">
+        <div style="font-weight:600;margin-bottom:6px">提示</div>
+        <ol style="margin:0 0 0 18px; color:#444; font-size:14px">
+          <li>选择网格尺寸（3-5）。</li>
+          <li>可粘贴图片链接或上传图片文件。</li>
+          <li>点击“打乱”开始游戏；通过点击与空格相邻的块来移动。</li>
+        </ol>
+      </div>
+
+      <div id="winBox" style="display:none" class="win">完成啦！🎉</div>
+    </aside>
+  </div>
+
+  <footer>实现说明：使用 background-position 切割图片，采用从已解状态做随机合法步数打乱保证可解。</footer>
+
+<script>
+(function(){
+  // 默认 SVG 图片（data URI），无需网络
+  const defaultImage = encodeURI(
+    `data:image/svg+xml;utf8,
+    <svg xmlns='http://www.w3.org/2000/svg' width='800' height='800'>
+      <defs>
+        <linearGradient id='g' x1='0' x2='1'>
+          <stop stop-color='%23f6d365' offset='0'/>
+          <stop stop-color='%23fda085' offset='1'/>
+        </linearGradient>
+      </defs>
+      <rect width='100%' height='100%' fill='url(%23g)'/>
+      <g font-size='80' font-family='Arial' fill='rgba(255,255,255,0.95)' text-anchor='middle'>
+        <text x='50%' y='45%'>拼图</text>
+        <text x='50%' y='60%' font-size='40'>Sliding Puzzle</text>
+      </g>
+    </svg>`
+  );
+
+  // DOM
+  const tilesEl = document.getElementById('tiles');
+  const sizeSelect = document.getElementById('size');
+  const imgUrlInput = document.getElementById('imgUrl');
+  const imgFileInput = document.getElementById('imgFile');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const solveBtn = document.getElementById('solveBtn');
+  const movesEl = document.getElementById('moves');
+  const timeEl = document.getElementById('time');
+  const statusEl = document.getElementById('status');
+  const winBox = document.getElementById('winBox');
+  const tilesContainer = document.getElementById('tiles');
+  const board = document.getElementById('board');
+
+  // State
+  let N = parseInt(sizeSelect.value,10);   // grid size
+  let imgSrc = defaultImage;
+  let positions = []; // positions array: tiles positions; last one is empty
+  let emptyIndex = null;
+  let moves = 0;
+  let timer = null;
+  let seconds = 0;
+  let started = false;
+
+  function formatTime(s){
+    const mm = Math.floor(s/60).toString().padStart(2,'0');
+    const ss = (s%60).toString().padStart(2,'0');
+    return mm + ':' + ss;
+  }
+
+  function updateStatus(){
+    movesEl.textContent = moves;
+    timeEl.textContent = formatTime(seconds);
+    statusEl.textContent = `步数: ${moves} • 用时: ${formatTime(seconds)}`;
+  }
+
+  function buildTiles(){
+    // set CSS variable
+    tilesContainer.style.setProperty('--n', N);
+    // create solved positions 0..N*N-1
+    const total = N*N;
+    positions = Array.from({length: total}, (_,i)=>i);
+    emptyIndex = total-1;
+    render();
+    resetTimer();
+    moves = 0;
+    seconds = 0;
+    started = false;
+    winBox.style.display = 'none';
+    updateStatus();
+  }
+
+  function render(){
+    tilesEl.innerHTML = '';
+    const total = N*N;
+    for(let i=0;i<total;i++){
+      const tileIndex = positions[i];
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      if(tileIndex === total-1){
+        tile.classList.add('empty');
+        tile.textContent = '';
+      } else {
+        tile.textContent = '';
+      }
+
+      // compute background-position for tileIndex
+      const row = Math.floor(tileIndex / N);
+      const col = tileIndex % N;
+      const posX = (100 / (N - 1)) * col;
+      const posY = (100 / (N - 1)) * row;
+
+      tile.style.backgroundImage = `url("${imgSrc}")`;
+      tile.style.backgroundPosition = `${posX}% ${posY}%`;
+      tile.dataset.pos = i;        // current cell index
+      tile.dataset.index = tileIndex; // which piece this is
+
+      tile.addEventListener('click', onTileClick);
+      tilesEl.appendChild(tile);
+    }
+  }
+
+  function onTileClick(e){
+    const el = e.currentTarget;
+    const idx = Number(el.dataset.pos); // where the clicked tile currently is
+    if(canMove(idx)){
+      moveTile(idx);
+      if(!started){
+        startTimer();
+        started = true;
+      }
+      moves++;
+      updateStatus();
+      if(isSolved()){
+        onWin();
+      }
+    }
+  }
+
+  function indexToRC(index){
+    return {r: Math.floor(index / N), c: index % N};
+  }
+
+  function rcToIndex(r,c){
+    return r * N + c;
+  }
+
+  function canMove(tilePosIndex){
+    const {r:cR, c:cC} = indexToRC(tilePosIndex);
+    const {r:eR, c:eC} = indexToRC(emptyIndex);
+    const dr = Math.abs(cR - eR);
+    const dc = Math.abs(cC - eC);
+    return (dr + dc) === 1;
+  }
+
+  function moveTile(tilePosIndex){
+    // swap tile at tilePosIndex with emptyIndex
+    const tmp = positions[emptyIndex];
+    positions[emptyIndex] = positions[tilePosIndex];
+    positions[tilePosIndex] = tmp;
+    emptyIndex = tilePosIndex;
+    render();
+  }
+
+  function isSolved(){
+    for(let i=0;i<positions.length;i++){
+      if(positions[i] !== i) return false;
+    }
+    return true;
+  }
+
+  function shuffle(steps = 200){
+    // make random legal moves from solved state to guarantee solvable
+    // start from solved state:
+    positions = Array.from({length:N*N}, (_,i)=>i);
+    emptyIndex = N*N - 1;
+
+    const dirs = [
+      {dr:-1,dc:0},
+      {dr:1,dc:0},
+      {dr:0,dc:-1},
+      {dr:0,dc:1}
+    ];
+    let lastMove = -1;
+    for(let i=0;i<steps;i++){
+      const {r:eR, c:eC} = indexToRC(emptyIndex);
+      const candidates = [];
+      for(let k=0;k<dirs.length;k++){
+        const nr = eR + dirs[k].dr;
+        const nc = eC + dirs[k].dc;
+        if(nr>=0 && nr<N && nc>=0 && nc<N){
+          const idx = rcToIndex(nr,nc);
+          // avoid undo immediately
+          if(idx !== lastMove) candidates.push(idx);
+        }
+      }
+      const pick = candidates[Math.floor(Math.random()*candidates.length)];
+      // move chosen tile into empty
+      positions[emptyIndex] = positions[pick];
+      positions[pick] = N*N -1;
+      lastMove = emptyIndex;
+      emptyIndex = pick;
+    }
+    moves = 0;
+    seconds = 0;
+    started = false;
+    resetTimer();
+    render();
+    updateStatus();
+    winBox.style.display = 'none';
+  }
+
+  function startTimer(){
+    if(timer) return;
+    timer = setInterval(()=>{
+      seconds++;
+      updateStatus();
+    },1000);
+  }
+
+  function resetTimer(){
+    if(timer){
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function onWin(){
+    resetTimer();
+    winBox.style.display = 'block';
+    started = false;
+  }
+
+  function applyImage(src){
+    imgSrc = src || defaultImage;
+    // re-render tiles with new background image
+    render();
+  }
+
+  // handlers
+  sizeSelect.addEventListener('change', ()=>{
+    N = parseInt(sizeSelect.value,10);
+    buildTiles();
+  });
+
+  imgUrlInput.addEventListener('keyup', (e)=>{
+    if(e.key === 'Enter'){
+      const v = imgUrlInput.value.trim();
+      if(v) applyImage(v);
+    }
+  });
+
+  imgFileInput.addEventListener('change', (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      applyImage(ev.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  shuffleBtn.addEventListener('click', ()=>{
+    shuffle( Math.max(200, N*N*80) );
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    buildTiles();
+    applyImage(imgSrc);
+  });
+
+  solveBtn.addEventListener('click', ()=>{
+    // restore to solved
+    positions = Array.from({length:N*N}, (_,i)=>i);
+    emptyIndex = N*N - 1;
+    render();
+    moves = 0;
+    seconds = 0;
+    resetTimer();
+    updateStatus();
+    winBox.style.display = 'none';
+  });
+
+  // Initialize
+  buildTiles();
+  applyImage(defaultImage);
+
+  // Accessibility: keyboard arrow keys to move tiles by moving the tile into empty if arrow points to tile
+  window.addEventListener('keydown', (e)=>{
+    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) return;
+    // determine which tile would move into empty when press arrow:
+    // ArrowUp: move tile below empty up -> that tile is at (eR+1, eC)
+    const {r:eR, c:eC} = indexToRC(emptyIndex);
+    let target = null;
+    if(e.key === 'ArrowUp'){ // move tile below up
+      const nr = eR + 1;
+      if(nr < N) target = rcToIndex(nr, eC);
+    } else if(e.key === 'ArrowDown'){
+      const nr = eR - 1;
+      if(nr >= 0) target = rcToIndex(nr, eC);
+    } else if(e.key === 'ArrowLeft'){
+      const nc = eC + 1;
+      if(nc < N) target = rcToIndex(eR, nc);
+    } else if(e.key === 'ArrowRight'){
+      const nc = eC - 1;
+      if(nc >=0) target = rcToIndex(eR, nc);
+    }
+    if(target !== null && canMove(target)){
+      moveTile(target);
+      if(!started){
+        startTimer();
+        started = true;
+      }
+      moves++;
+      updateStatus();
+      if(isSolved()) onWin();
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
